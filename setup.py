@@ -29,7 +29,7 @@ setup(
     # There are some restrictions on what makes a valid project name
     # specification here:
     # https://packaging.python.org/specifications/core-metadata/#name
-    name='FIXME',  # Required
+    name='py-transgpt',  # Required
 
     # Versions should comply with PEP 440:
     # https://www.python.org/dev/peps/pep-0440/
@@ -37,12 +37,12 @@ setup(
     # For a discussion on single-sourcing the version across setup.py and the
     # project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='FIXME',  # Required. eg. 1.2.3
+    version='1.0',  # Required. eg. 1.2.3
 
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#summary
-    description='FIXME',  # Optional
+    description='Platform translation interface encapsulation: ChatGPT, Baidu, Tencent',  # Optional
 
     # This is an optional longer description of your project that represents
     # the body of text which users will see when they visit PyPI.
@@ -70,7 +70,7 @@ setup(
     #
     # This field corresponds to the "Home-Page" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#home-page-optional
-    url='https://github.com/lyy289065406/FIXME',  # Optional
+    url='https://github.com/EXP-Codes/py-transgpt',  # Optional
 
     # This should be your name or the name of the organization which owns the
     # project.
@@ -78,7 +78,7 @@ setup(
 
     # This should be a valid email address corresponding to the author listed
     # above.
-    author_email='289065406@qq.com',  # Optional
+    author_email='exp.lqb@gmail.com',  # Optional
 
     # Classifiers help users find your project by categorizing it.
     #
@@ -114,7 +114,7 @@ setup(
     # Note that this is a list of additional keywords, separated
     # by commas, to be used to assist searching for the distribution in a
     # larger catalog.
-    keywords='FIXME, FIXME, FIXME, FIXME',  # Optional
+    keywords='translation, ChatGPT, Baidu, Tencent',  # Optional
 
     # When your source code is in a subdirectory under the project root, e.g.
     # `src/`, it is necessary to specify the `package_dir` argument.
@@ -143,7 +143,7 @@ setup(
     #
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['FIXME'],  # Optional
+    install_requires=['py-color-log>=1.0.4', 'requests>=2.22.0', 'openai>=0.27.2', 'tencentcloud-sdk-python==3.0.681'],  # Optional
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). Users will be able to install these using the "extras"
