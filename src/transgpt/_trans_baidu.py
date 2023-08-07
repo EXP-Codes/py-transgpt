@@ -8,8 +8,8 @@ import time
 import hashlib
 import requests
 import json
-from _settings import *
-from _trans_base import BaseTranslation
+from ._settings import *
+from ._trans_base import BaseTranslation
 from color_log.clog import log
 
 
@@ -19,7 +19,8 @@ ARG_API_URL = 'api_url'
 class BaiduTranslation(BaseTranslation) :
 
     def __init__(self, api_id, api_key, api_url=BAIDU_API_URL) -> None :
-        BaseTranslation.__init__(api_id, api_key, api_url)
+        BaseTranslation.__init__(self, api_id, api_key)
+        self.api_url = api_url
 
 
     def _translate(self, segment, from_lang='en', to_lang='zh', args={}) :
@@ -31,12 +32,12 @@ class BaiduTranslation(BaseTranslation) :
             'q': segment, 
             'from': from_lang, 
             'to': to_lang, 
-            'appid': self.app_id, 
+            'appid': self.api_id, 
             'salt': salt, 
             'sign': sign
         }
         
-        response = requests.post(self.url, headers=headers, data=body)
+        response = requests.post(self.api_url, headers=headers, data=body)
         trans_result = []
         try :
             if response.status_code == 200:
@@ -54,10 +55,10 @@ class BaiduTranslation(BaseTranslation) :
         salt = int(time.time())
         sign = hashlib.md5(
             ("%s%s%i%s" % (
-                self.app_id, 
+                self.api_id, 
                 data,
                 salt, 
-                self.app_pass
+                self.api_key
             )).encode(encoding=CHARSET)
         ).hexdigest()
         return salt, sign

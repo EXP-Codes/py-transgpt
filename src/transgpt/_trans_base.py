@@ -4,7 +4,7 @@
 
 import os
 import time
-from _settings import *
+from ._settings import *
 from abc import ABCMeta, abstractmethod     # python不存在抽象类的概念， 需要引入abc模块实现
 from color_log.clog import log
 
@@ -13,10 +13,9 @@ class BaseTranslation :
 
     __metaclass__ = ABCMeta # 定义为抽象类
 
-    def __init__(self, api_id, api_key, api_url) -> None :
+    def __init__(self, api_id, api_key) -> None :
         self.api_id = api_id
         self.api_key = api_key
-        self.api_url = api_url
 
 
     def translate(self, content, from_lang, to_lang, savepath='', oncesave=False, args={}) -> str :
@@ -31,11 +30,13 @@ class BaseTranslation :
             log.info("正在翻译第 [%i] 段 ..." % cnt)
             trans_segment = self._translate(seg, from_lang, to_lang, args)
             trans_result.append(trans_segment)
-            self._save_trans(trans_segment, savepath)
+            if not self.oncesave :
+                self._save_trans(trans_segment, savepath)
             time.sleep(1)
 
         trans_content = DOUBLE_CRLF.join(trans_result)
-        self._save_trans(trans_content, savepath)
+        if self.oncesave :
+            self._save_trans(trans_content, savepath)
         return trans_content
 
 

@@ -8,8 +8,8 @@
 
 import os
 import openai
-from _settings import *
-from _trans_base import BaseTranslation
+from ._settings import *
+from ._trans_base import BaseTranslation
 
 HTTP_PROXY = "HTTP_PROXY"
 HTTPS_PROXY = "HTTPS_PROXY"
@@ -25,7 +25,7 @@ ARG_PROXY_PORT = 'proxy_port'
 class ChatgptTranslation(BaseTranslation) :
 
     def __init__(self, openai_key, openai_model=CHATGPT_35_TURBO, proxy_ip='127.0.0.1', proxy_port=0) :
-        BaseTranslation.__init__('', openai_key)
+        BaseTranslation.__init__(self, '', openai_key)
         openai.api_key = openai_key
         self.model = openai_model or CHATGPT_35_TURBO
         self.proxy = f"http://{proxy_ip}:{proxy_port}" if proxy_port > 0 else ""
