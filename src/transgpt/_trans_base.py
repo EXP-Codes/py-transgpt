@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------
 
+import os
 import time
 from _settings import *
 from abc import ABCMeta, abstractmethod     # python不存在抽象类的概念， 需要引入abc模块实现
@@ -18,7 +19,7 @@ class BaseTranslation :
         self.api_url = api_url
 
 
-    def translate(self, content, from_lang, to_lang, savepath, oncesave=False, args={}) -> str :
+    def translate(self, content, from_lang, to_lang, savepath='', oncesave=False, args={}) -> str :
         self.oncesave = oncesave    # False: 分段保存； True: 一次性保存
         trans_result = []
         segments = self._cut(content)
@@ -66,6 +67,15 @@ class BaseTranslation :
     
 
     def _save_trans(self, content, savepath) :
+        if not savepath :
+            return
+        
+        save_dir = os.path.dirname(savepath)
+        try :
+            os.makedirs(save_dir)
+        except :
+            pass
+
         if self.oncesave :
             with open(savepath, "w+", encoding=CHARSET) as file :
                 file.write(content)
@@ -77,10 +87,10 @@ class BaseTranslation :
             log.info(f"段翻译完成，译文已追加存储到 [{savepath}]")
 
 
-    # API 接口限制每次翻译的字数
+    
     @abstractmethod
     def _len_limit(self) :
-        return 500
+        return 500  # API 接口限制每次翻译的字数
     
 
     @abstractmethod

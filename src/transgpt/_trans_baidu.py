@@ -14,13 +14,15 @@ from color_log.clog import log
 
 
 BAIDU_API_URL = "https://fanyi-api.baidu.com/api/trans/vip/translate"
+ARG_API_URL = 'api_url'
+
 class BaiduTranslation(BaseTranslation) :
 
     def __init__(self, api_id, api_key, api_url=BAIDU_API_URL) -> None :
         BaseTranslation.__init__(api_id, api_key, api_url)
 
 
-    def _translate(self, segment, from_lang, to_lang, args={}) :
+    def _translate(self, segment, from_lang='en', to_lang='zh', args={}) :
         salt, sign = self._to_sign(segment)
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded'

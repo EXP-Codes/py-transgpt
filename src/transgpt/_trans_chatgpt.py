@@ -17,6 +17,10 @@ CHATGPT_35_TURBO = "gpt-3.5-turbo"
 CHATGPT_4 = "gpt-4"
 CHATGPT_4_32K = "gpt-4-32k"
 
+ARG_ROLE = 'role'
+ARG_OPENAI_MODEL = 'openai_model'
+ARG_PROXY_IP = 'proxy_ip'
+ARG_PROXY_PORT = 'proxy_port'
 
 class ChatgptTranslation(BaseTranslation) :
 
@@ -27,8 +31,8 @@ class ChatgptTranslation(BaseTranslation) :
         self.proxy = f"http://{proxy_ip}:{proxy_port}" if proxy_port > 0 else ""
         
     
-    def _translate(self, segment, from_lang, to_lang, args={}) :
-        role = args.get('role') or f"您作为一个资深的专业翻译官，把下面文本中的{from_lang}内容翻译为{to_lang}，并润色（请勿回复翻译文本以外的内容）"
+    def _translate(self, segment, from_lang='英文', to_lang='中文', args={}) :
+        role = args.get(ARG_ROLE) or f"您作为一个资深的专业翻译官，把下面文本中的{from_lang}内容翻译为{to_lang}，并润色（请勿回复翻译文本以外的内容）"
         role_setting = {"role": "system", "content": role}     # 设置 GPT 人设
         return self.ask_gpt(role_setting, segment)
 

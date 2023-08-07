@@ -12,72 +12,63 @@
 #   python ./py/translate.py -a "chatgpt" -k "api_key" -t "./gitbook/markdown/jp/chapter080/19.md"
 # --------------------------------------------
 
-import argparse
-from _utils import *
-from _trans import *
 from _settings import *
+from _trans_baidu import *
+from _trans_tencent import *
+from _trans_chatgpt import *
 from color_log.clog import log
 
-def args() :
-    parser = argparse.ArgumentParser(
-        prog='', # 会被 usage 覆盖
-        usage='python ./py/translate.py -a {api_type} -i {api_id} -k {api_pass} -t {want to translate filepath}',  
-        description='对某个日语文件进行机翻',  
-        epilog='更多参数可用 python ./py/onekey.py -h 查看'
-    )
-    parser.add_argument('-a', '--trans_api', dest='trans_api', type=str, default=TENCENT, help='翻译 API 的服务提供商，可选： chatgpt, baidu, tencent（默认）')
-    parser.add_argument('-i', '--api_id', dest='api_id', type=str, default="", help='翻译 API ID')
-    parser.add_argument('-k', '--api_key', dest='api_key', type=str, default="", help='翻译 API KEY')
-    parser.add_argument('-t', '--trans_path', dest='trans_path', type=str, default="", help='待翻译的文件路径')
-    parser.add_argument('-s', '--host', dest='host', type=str, default="127.0.0.1", help='HTTP 代理 IP')
-    parser.add_argument('-p', '--port', dest='port', type=int, default=0, help='HTTP 代理端口')
-    return parser.parse_args()
+
+# 翻译平台
+BAIDU = "baidu"
+TENCENT = "tencent"
+CHATGPT = "chatgpt"
+
+
+def trans(content, 
+            api_id, api_key, from_lang, to_lang, 
+            platform=TENCENT, savepath='', oncesave=False, 
+            args={}
+    ) -> str:
+    """
+    翻译文本
+    :param content      : 待翻译文本
+    :param api_id       : 接口 API_ID / APP_ID （ChatGPT 不需要）
+    :param api_key      : 接口 API_KEY / SECRET_KEY
+    :param from_lang    : 待翻译文本的源语言（不同的平台语言代码不一样）
+    :param to_lang      : 需要翻译的目标语言（不同的平台语言代码不一样）
+    :param platform     : 翻译平台，目前支持： chatgpt, baidu, tencent（默认）
+    :param savepath     : 翻译文本保存的位置，若为空则不保存（可通过返回值获取）
+    :param oncesave     : 是否一次性保存翻译文本（对于超长文本，内部会进行分段翻译，为了避免网络异常导致已翻译文本丢失，此项默认关闭）
+    :param args         : hash 其他参数表
+                            api_url         : 仅百度翻译有用：接口 API 路径
+                            region          : 仅腾讯翻译有用：翻译服务器所在的区域
+                            UntranslatedText: 仅腾讯翻译有用：忽略的翻译文本
+                            role            : 仅 ChatGPT 有用：AI 角色人设
+                            openai_model    : 仅 ChatGPT 有用：OpenAPI 接口的大模型
+                            proxy_ip        : 仅 ChatGPT 有用：网络代理服务 IP
+                            proxy_port      : 仅 ChatGPT 有用：网络代理服务端口
+    :return: 已翻译文本
+    """
+
+    log.info(f"正在使用 [{platform}] 翻译文本 ...")
+    if platform == BAIDU :
+        api_url = args.get(ARG_API_URL) or BAIDU_API_URL
+        client = BaiduTranslation(api_id, api_key, api_url)
+
+    elif platform == CHATGPT :
+        openai_model = args.get(ARG_OPENAI_MODEL) or CHATGPT_35_TURBO
+        proxy_ip = args.get(ARG_PROXY_IP) or '127.0.0.1'
+        proxy_port = args.get(ARG_PROXY_PORT) or 0
+        client = ChatgptTranslation(api_key, openai_model, proxy_ip, proxy_port)
     
+    else :
+        region = args.get(ARG_REGION) or GZ_REGION
+        client = TencentTranslation(api_id, api_key, region)
 
-
-def main(args) :
-    trans(args, args.trans_path)
-
-
-
-def trans(args, filepath) :
-    log.info("正在准备翻译 [%s]" % filepath)
-    with open('./py/itemInfo_Sak_Korean.lub', "r", encoding=CHARSET) as file :
-        data = file.read()
-    
-    log.info("正在机翻内容 ...")
-    content = machine_translate(args, data)
-
-    
-    
-
-
-
-def convert(args, data) :
-
-    # 通用字符转换
-    data = data.replace(" ", "")
-    data = data.replace("《", "『").replace("》", "』")
-    data = data.replace("‘", "『").replace("’", "』")
-    data = data.replace("“", "「").replace("”", "」")
-    data = data.replace("·", "・")
-    data = data.replace(SEGMENT_SPLIT, "※ ※ ※ ※ ※ ※ ※ ※ ※ ※ ※ ※ ※ ※ ※ ※ ※ ※ ※ ※ ※ ※ ※")
-
-    # 特殊翻译器的字符转换
-    if args.trans_api == TENCENT :
-        data = data.replace("\n」「", "\n「")
-        data = data.replace("」「\n", "」\n")
-        data = data.replace("\n「」", "\n「")
-        data = data.replace("「」\n", "」\n")
-        data = data.replace("\n」", "\n「")
-        data = data.replace("「\n", "」\n")
-        data = data.replace("「「", "「")
-        data = data.replace("」」", "」")
-    
-    return data
-
-
-
-if __name__ == "__main__" :
-    main(args())
+    trans_content = client.translate(content, from_lang, to_lang, savepath, oncesave, args)
+    log.info(f"文本翻译完成")
+    if savepath :
+        log.info("翻译文本已%s存储到: %s" % ('' if oncesave else '分段', savepath))
+    return trans_content
     
