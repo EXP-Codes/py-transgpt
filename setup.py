@@ -181,7 +181,6 @@ setup(
     # executes the function `main` from this package when invoked:
     entry_points={  # Optional
         'console_scripts': [
-            'FIXME=builder:build',
         ],
     },
 
@@ -195,9 +194,9 @@ setup(
     # maintainers, and where to support the project financially. The key is
     # what's used to render the link text on PyPI.
     project_urls={  # Optional
-        'Bug Reports': 'https://github.com/lyy289065406/FIXME/issues',
-        'Funding': 'https://github.com/lyy289065406/FIXME/blob/master/imgs/donate-alipay.png',
-        'Say Thanks!': 'https://github.com/lyy289065406/FIXME/blob/master/imgs/donate-wechat.png',
-        'Source': 'https://github.com/lyy289065406/FIXME/',
+        'Bug Reports': 'https://github.com/EXP-Codes/py-transgpt/issues',
+        'Funding': 'https://github.com/EXP-Codes/py-transgpt/tree/master/imgs/donate-alipay.png',
+        'Say Thanks!': 'https://github.com/EXP-Codes/py-transgpt/tree/master/imgs/donate-wechat.png',
+        'Source': 'https://github.com/EXP-Codes/py-transgpt',
     },
 )
