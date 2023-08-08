@@ -32,6 +32,15 @@ class ChatgptTranslation(BaseTranslation) :
         
     
     def _translate(self, segment, from_lang='英文', to_lang='中文', args={}) :
+        """
+        翻译文本段落
+        :param segment   : 待翻译文本段落
+        :param from_lang : 待翻译文本的源语言（不同的平台语言代码不一样）
+        :param to_lang   : 需要翻译的目标语言（不同的平台语言代码不一样）
+        :param args      : hash 其他参数表
+                            role : AI 角色人设
+        :return: 已翻译的文本段落
+        """
         role = args.get(ARG_ROLE) or f"您作为一个资深的专业翻译官，把下面文本中的{from_lang}内容翻译为{to_lang}，并润色（请勿回复翻译文本以外的内容）"
         role_setting = {"role": "system", "content": role}     # 设置 GPT 人设
         return self.ask_gpt(role_setting, segment)

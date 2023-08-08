@@ -24,6 +24,15 @@ class BaiduTranslation(BaseTranslation) :
 
 
     def _translate(self, segment, from_lang='en', to_lang='zh', args={}) :
+        """
+        翻译文本段落
+        :param segment   : 待翻译文本段落
+        :param from_lang : 待翻译文本的源语言（不同的平台语言代码不一样）
+        :param to_lang   : 需要翻译的目标语言（不同的平台语言代码不一样）
+        :param args      : hash 其他参数表（暂时没用）
+        :return: 已翻译的文本段落
+        """
+
         salt, sign = self._to_sign(segment)
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded'

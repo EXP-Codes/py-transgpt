@@ -24,6 +24,16 @@ class TencentTranslation(BaseTranslation) :
 
     
     def _translate(self, segment, from_lang='en', to_lang='zh', args={}) :
+        """
+        翻译文本段落
+        :param content      : 待翻译文本段落
+        :param from_lang    : 待翻译文本的源语言（不同的平台语言代码不一样）
+        :param to_lang      : 需要翻译的目标语言（不同的平台语言代码不一样）
+        :param args         : hash 其他参数表
+                                UntranslatedText: 忽略的翻译文本
+        :return: 已翻译的文本段落
+        """
+        
         req = TextTranslateRequest()
         req.SourceText = segment
         req.Source = from_lang
