@@ -13,9 +13,9 @@
 # --------------------------------------------
 
 from ._settings import *
-from ._trans_baidu import *
-from ._trans_tencent import *
-from ._trans_chatgpt import *
+from .trans_baidu import *
+from .trans_tencent import *
+from .trans_chatgpt import *
 from color_log.clog import log
 
 

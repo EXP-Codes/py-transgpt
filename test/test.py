@@ -13,6 +13,9 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../')
 
 import unittest
 from src.transgpt.translate import *
+from src.transgpt.trans_baidu import *
+from src.transgpt.trans_tencent import *
+from src.transgpt.trans_chatgpt import *
 
 
 class TestScenes(unittest.TestCase):
@@ -47,7 +50,7 @@ class TestScenes(unittest.TestCase):
         pass
 
 
-    def test_baidu_trans(self) :
+    def test_baidu_trans_1(self) :
         result = trans(
             self.content, 
             from_lang='jp', 
@@ -59,7 +62,7 @@ class TestScenes(unittest.TestCase):
         )
 
 
-    def test_tencent_trans(self) :
+    def test_tencent_trans_1(self) :
         result = trans(
             self.content, 
             from_lang='jp', 
@@ -75,22 +78,53 @@ class TestScenes(unittest.TestCase):
         )
 
 
-    def test_chatgpt_trans(self) :
+    def test_chatgpt_trans_1(self) :
+        # 生成 API Key https://platform.openai.com/account/api-keys
+        API_KEY = 'sk-xxxxxxxxxxxxxxxx'
+        role = '基于《从零开始的异世界生活》小说的背景，把日文内容翻译成中文，并润色'
+        savepath = './test/output/result_chatgpt.txt'
+
+        # 使用 ChatGPT 翻译
         result = trans(
             self.content, 
             from_lang='日文',
             to_lang='中文',
             platform=CHATGPT, 
             api_id='', 
-            api_key='sk-xxxxxxxxxxxxxxxx', 
-            savepath='./test/output/result_chatgpt.txt', 
+            api_key=API_KEY, 
+            savepath=savepath, 
             args={
-                ARG_ROLE: '基于《从零开始的异世界生活》小说的背景，把日文内容翻译成中文，并润色',
+                ARG_ROLE: role,
                 ARG_OPENAI_MODEL: CHATGPT_35_TURBO, 
                 ARG_PROXY_IP: '127.0.0.1', 
                 ARG_PROXY_PORT: 8888
             }
         )
+
+
+    def test_chatgpt_trans_2(self) :
+        # 生成 API Key https://platform.openai.com/account/api-keys
+        API_KEY = 'sk-xxxxxxxxxxxxxxxx'
+        role = '基于《从零开始的异世界生活》小说的背景，把日文内容翻译成中文，并润色'
+        savepath = './test/output/result_chatgpt.txt'
+
+        # 使用 ChatGPT 翻译
+        client = ChatgptTranslation(API_KEY,
+                                    openai_model=CHATGPT_35_TURBO,  # Option
+                                    proxy_ip='127.0.0.1',           # Option
+                                    proxy_port=0                    # Option
+        )
+        client.translate(self.content, 
+                         savepath=savepath, 
+                         from_lang='日文',      # Option: 通过指定 from_lang ，默认在内部生成 “翻译官” 的人设
+                         to_lang='中文',        # Option: 通过指定 to_lang ，默认在内部生成 “翻译官” 的人设
+                         args={
+                             ARG_ROLE: role,    # Option: 直接定义人设，无需指定 from_lang 和 to_lang （内部生成的默认人设会被覆盖）
+                         }
+        )
+        
+
+
 
 
 if __name__ == '__main__':

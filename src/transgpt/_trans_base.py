@@ -18,7 +18,7 @@ class BaseTranslation :
         self.api_key = api_key
 
 
-    def translate(self, content, from_lang, to_lang, savepath='', oncesave=False, args={}) -> str :
+    def translate(self, content, from_lang='', to_lang='', savepath='', oncesave=False, args={}) -> str :
         self.oncesave = oncesave    # False: 分段保存； True: 一次性保存
         trans_result = []
         segments = self._cut(content)
