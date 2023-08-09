@@ -1,6 +1,6 @@
 # py-transgpt
 
-> python 长文本多平台翻译器（目前支持 baidu、tencent、chatgpt）
+> python 长文本/多平台翻译器（目前支持 baidu、tencent、chatgpt）
 
 ------
 
@@ -66,7 +66,7 @@ result = client.translate(${CONTENT}, from_lang='jp', to_lang='zh')
 from transgpt.translate import trans, TENCENT
 result = trans(
     ${CONTENT}, 
-    from_lang='jp', 
+    from_lang='ja', 
     to_lang='zh', 
     platform=TENCENT, 
     api_id=${TX_SECRET_ID}, 
@@ -76,7 +76,7 @@ result = trans(
 # 使用方法 2
 from transgpt.trans_tencent import TencentTranslation
 client = TencentTranslation(api_id=${BD_APP_ID}, api_key=${BD_APP_KEY})
-result = client.translate(${CONTENT}, from_lang='jp', to_lang='zh')
+result = client.translate(${CONTENT}, from_lang='ja', to_lang='zh')
 ```
 
 更多使用方法详见单元测试：

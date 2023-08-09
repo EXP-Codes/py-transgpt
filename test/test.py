@@ -109,7 +109,7 @@ class TestScenes(unittest.TestCase):
     def test_tencent_trans_1(self) :
         result = trans(
             self.CONTENT, 
-            from_lang='jp', 
+            from_lang='ja', 
             to_lang='zh', 
             platform=TENCENT, 
             api_id=self.TX_SECRET_ID, 
@@ -134,7 +134,7 @@ class TestScenes(unittest.TestCase):
         # 最少参数（写文件）
         result = client.translate(
             self.CONTENT, 
-            from_lang='jp',
+            from_lang='ja',
             to_lang='zh',
             savepath=self.TX_SAVE_PATH, 
             oncesave=True, 
@@ -146,7 +146,7 @@ class TestScenes(unittest.TestCase):
         # 最少参数（仅内存）
         result = client.translate(
             self.CONTENT, 
-            from_lang='jp',
+            from_lang='ja',
             to_lang='zh'
         )
 
