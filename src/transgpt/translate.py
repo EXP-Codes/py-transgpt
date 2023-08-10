@@ -17,18 +17,18 @@ TENCENT = "tencent"
 CHATGPT = "chatgpt"
 
 
-def trans(content, from_lang, to_lang, 
-            api_id, api_key, 
+def trans(content, api_id, api_key, 
+            from_lang='', to_lang='', 
             platform=TENCENT, savepath='', oncesave=False, 
             args={}
     ) -> str:
     """
     翻译文本
     :param content      : 待翻译文本
-    :param from_lang    : 待翻译文本的源语言（不同的平台语言代码不一样）
-    :param to_lang      : 需要翻译的目标语言（不同的平台语言代码不一样）
     :param api_id       : 接口 API_ID / APP_ID （ChatGPT 不需要）
     :param api_key      : 接口 API_KEY / SECRET_KEY
+    :param from_lang    : 待翻译文本的源语言（不同的平台语言代码不一样）
+    :param to_lang      : 需要翻译的目标语言（不同的平台语言代码不一样）
     :param platform     : 翻译平台，目前支持： chatgpt, baidu, tencent（默认）
     :param savepath     : 翻译文本保存的位置，若为空则不保存（可通过返回值获取）
     :param oncesave     : 是否一次性保存翻译文本（对于超长文本，内部会进行分段翻译，为了避免网络异常导致已翻译文本丢失，此项默认关闭）
