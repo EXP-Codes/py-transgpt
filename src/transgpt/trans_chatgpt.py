@@ -13,8 +13,10 @@ from ._trans_base import BaseTranslation
 
 HTTP_PROXY = "HTTP_PROXY"
 HTTPS_PROXY = "HTTPS_PROXY"
+
+# GPT 接口模型定义 https://platform.openai.com/docs/models/
 CHATGPT_35_TURBO = "gpt-3.5-turbo"
-CHATGPT_4 = "gpt-4"
+CHATGPT_4 = "gpt-4" # 8K
 CHATGPT_4_32K = "gpt-4-32k"
 
 ARG_ROLE = 'role'
