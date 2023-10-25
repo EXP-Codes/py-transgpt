@@ -7,6 +7,7 @@
 
 
 import os
+import time
 import openai
 from ._settings import *
 from ._trans_base import BaseTranslation
@@ -25,6 +26,9 @@ ARG_PROXY_IP = 'proxy_ip'
 ARG_PROXY_PORT = 'proxy_port'
 
 class ChatgptTranslation(BaseTranslation) :
+
+    RETRY = 3
+    RETRY_WAIT_SECONDS = 30
 
     def __init__(self, openai_key, openai_model=CHATGPT_35_TURBO, proxy_ip='127.0.0.1', proxy_port=0) :
         BaseTranslation.__init__(self, '', openai_key)
@@ -45,22 +49,41 @@ class ChatgptTranslation(BaseTranslation) :
         """
         role = args.get(ARG_ROLE) or f"您作为一个资深的专业翻译官，把下面文本中的{from_lang}内容翻译为{to_lang}，并润色（请勿回复翻译文本以外的内容）"
         role_setting = {"role": "system", "content": role}     # 设置 GPT 人设
-        return self.ask_gpt(role_setting, segment)
+        return self._ask_gpt(role_setting, segment)
 
     
-    def ask_gpt(self, role_setting, segment) :
+    def _ask_gpt(self, role_setting, segment) :
         self._enable_proxy()
         msg = [
             role_setting, 
             {"role": "user", "content": segment}
         ]
-        rsp = openai.ChatCompletion.create(
-          model=self.model,
-          messages=msg
-        )
+        rsp = self._wait_for_ask(msg)
         rst = rsp.get("choices")[0]["message"]["content"]
         self._disable_proxy()
         return rst
+    
+
+    def _wait_for_ask(self, question) :
+        rsp = ""
+        for i in range(self.RETRY) :
+            try :
+                rsp = openai.ChatCompletion.create(
+                    model=self.model,
+                    messages=question
+                )
+                break
+
+            except Exception as e:
+                rsp = {
+                    'choices': [{
+                        'message': {
+                            'content': f"[ERROR] ChatGPT No Response: {e}"
+                        }
+                    }]
+                }
+                time.sleep(self.RETRY_WAIT_SECONDS)
+        return rsp
 
 
     def _enable_proxy(self) :
