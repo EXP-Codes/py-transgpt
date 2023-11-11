@@ -18,7 +18,7 @@ HTTPS_PROXY = "HTTPS_PROXY"
 # GPT 接口模型定义 https://platform.openai.com/docs/models/
 CHATGPT_35_TURBO = "gpt-3.5-turbo"
 CHATGPT_4 = "gpt-4" # 8K
-CHATGPT_4_32K = "gpt-4-32k"
+CHATGPT_4_TRUBO = "gpt-4-1106-preview"    # 128K
 
 ARG_ROLE = 'role'
 ARG_OPENAI_MODEL = 'openai_model'
