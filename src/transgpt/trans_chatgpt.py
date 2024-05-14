@@ -19,6 +19,7 @@ HTTPS_PROXY = "HTTPS_PROXY"
 CHATGPT_35_TURBO = "gpt-3.5-turbo"
 CHATGPT_4 = "gpt-4" # 8K
 CHATGPT_4_TRUBO = "gpt-4-1106-preview"    # 128K
+CHATGPT_4o = "gpt-4o"    # 128K
 
 ARG_ROLE = 'role'
 ARG_OPENAI_MODEL = 'openai_model'
