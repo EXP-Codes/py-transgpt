@@ -16,10 +16,11 @@ HTTP_PROXY = "HTTP_PROXY"
 HTTPS_PROXY = "HTTPS_PROXY"
 
 # GPT 接口模型定义 https://platform.openai.com/docs/models/
-CHATGPT_35_TURBO = "gpt-3.5-turbo"
-CHATGPT_4 = "gpt-4" # 8K
-CHATGPT_4_TRUBO = "gpt-4-1106-preview"    # 128K
-CHATGPT_4o = "gpt-4o"    # 128K
+CHATGPT_35_TURBO = "gpt-3.5-turbo"      # 16K
+CHATGPT_4 = "gpt-4"                     # 8K
+CHATGPT_4_TRUBO = "gpt-4-turbo"         # 128K
+CHATGPT_4o = "chatgpt-4o-latest"        # 128K
+CHATGPT_4o_MINI = "gpt-4o-mini"         # 128K
 
 ARG_ROLE = 'role'
 ARG_OPENAI_MODEL = 'openai_model'
@@ -31,10 +32,10 @@ class ChatgptTranslation(BaseTranslation) :
     RETRY = 3
     RETRY_WAIT_SECONDS = 30
 
-    def __init__(self, openai_key, openai_model=CHATGPT_35_TURBO, proxy_ip='127.0.0.1', proxy_port=0) :
+    def __init__(self, openai_key, openai_model=CHATGPT_4o_MINI, proxy_ip='127.0.0.1', proxy_port=0) :
         BaseTranslation.__init__(self, '', openai_key)
         openai.api_key = openai_key
-        self.model = openai_model or CHATGPT_35_TURBO
+        self.model = openai_model or CHATGPT_4o_MINI
         self.proxy = f"http://{proxy_ip}:{proxy_port}" if proxy_port > 0 else ""
         
     
@@ -57,7 +58,7 @@ class ChatgptTranslation(BaseTranslation) :
         self._enable_proxy()
         msg = [
             role_setting, 
-            {"role": "user", "content": segment}
+            { "role": "user", "content": segment }
         ]
         rsp = self._wait_for_ask(msg)
         rst = rsp.get("choices")[0]["message"]["content"]
