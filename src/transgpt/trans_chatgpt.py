@@ -19,8 +19,9 @@ HTTPS_PROXY = "HTTPS_PROXY"
 CHATGPT_35_TURBO = "gpt-3.5-turbo"      # 16K
 CHATGPT_4 = "gpt-4"                     # 8K
 CHATGPT_4_TRUBO = "gpt-4-turbo"         # 128K
-CHATGPT_4o = "chatgpt-4o-latest"        # 128K
-CHATGPT_4o_MINI = "gpt-4o-mini"         # 128K
+CHATGPT_4o = "gpt-4o"                   # 128K（静态模型，适合翻译）
+CHATGPT_4o_LATEST = "chatgpt-4o-latest" # 128K（动态模型，价格高）
+CHATGPT_4o_MINI = "gpt-4o-mini"         # 128K（翻译较弱）
 
 ARG_ROLE = 'role'
 ARG_OPENAI_MODEL = 'openai_model'
