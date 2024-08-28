@@ -13,14 +13,16 @@ class BaseTranslation :
 
     __metaclass__ = ABCMeta # 定义为抽象类
 
-    def __init__(self, api_id, api_key) -> None :
+    def __init__(self, api_id, api_key, cut_len=500) -> None :
         """
         翻译文本
         :param api_id  : 接口 API_ID / APP_ID （ChatGPT 不需要）
         :param api_key : 接口 API_KEY / SECRET_KEY
+        :param cut_len : 自动切割长文本的每一段长度（取决于 API 接口限制每次翻译的字数）
         """
         self.api_id = api_id
         self.api_key = api_key
+        self.cut_len = cut_len
 
 
     def translate(self, content, from_lang='', to_lang='', savepath='', oncesave=False, args={}) -> str :
@@ -114,7 +116,7 @@ class BaseTranslation :
     
     @abstractmethod
     def _len_limit(self) :
-        return 500  # API 接口限制每次翻译的字数
+        return self.cut_len
     
 
     @abstractmethod

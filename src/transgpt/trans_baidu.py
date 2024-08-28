@@ -18,8 +18,8 @@ ARG_API_URL = 'api_url'
 
 class BaiduTranslation(BaseTranslation) :
 
-    def __init__(self, api_id, api_key, api_url=BAIDU_API_URL) -> None :
-        BaseTranslation.__init__(self, api_id, api_key)
+    def __init__(self, api_id, api_key, api_url=BAIDU_API_URL, cut_len=2000) -> None :
+        BaseTranslation.__init__(self, api_id, api_key, cut_len)
         self.api_url = api_url
 
 
@@ -71,8 +71,3 @@ class BaiduTranslation(BaseTranslation) :
             )).encode(encoding=CHARSET)
         ).hexdigest()
         return salt, sign
-
-
-    def _len_limit(self) :
-        return 2000
-    

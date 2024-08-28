@@ -17,8 +17,8 @@ ARG_UNTRANSLATED_TEXT = 'UntranslatedText'
 
 class TencentTranslation(BaseTranslation) :
 
-    def __init__(self, api_id, api_key, region=GZ_REGION) :
-        BaseTranslation.__init__(self, api_id, api_key)
+    def __init__(self, api_id, api_key, region=GZ_REGION, cut_len=2000) :
+        BaseTranslation.__init__(self, api_id, api_key, cut_len)
         cred = Credential(api_id, api_key)
         self.client = TmtClient(cred, region)
 
@@ -43,8 +43,4 @@ class TencentTranslation(BaseTranslation) :
         rsp = self.client.TextTranslate(req)
         return rsp.TargetText
 
-
-    def _len_limit(self) :
-        return 2000
-    
     

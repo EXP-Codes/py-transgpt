@@ -8,36 +8,44 @@
 
 import os
 import time
-import openai
+import httpx
+from openai import OpenAI
 from ._settings import *
 from ._trans_base import BaseTranslation
 
-HTTP_PROXY = "HTTP_PROXY"
-HTTPS_PROXY = "HTTPS_PROXY"
 
 # GPT 接口模型定义 https://platform.openai.com/docs/models/
-CHATGPT_35_TURBO = "gpt-3.5-turbo"      # 16K
-CHATGPT_4 = "gpt-4"                     # 8K
-CHATGPT_4_TRUBO = "gpt-4-turbo"         # 128K
-CHATGPT_4o = "gpt-4o"                   # 128K（静态模型，适合翻译）
-CHATGPT_4o_LATEST = "chatgpt-4o-latest" # 128K（动态模型，价格高）
-CHATGPT_4o_MINI = "gpt-4o-mini"         # 128K（翻译较弱）
+CHATGPT_35_TURBO = "gpt-3.5-turbo"          # 16K
+CHATGPT_4 = "gpt-4"                         # 8K
+CHATGPT_4_TRUBO = "gpt-4-turbo"             # 128K
+CHATGPT_4o = "gpt-4o"                       # 128K（静态模型，适合翻译）
+CHATGPT_4o_20240806 = "gpt-4o-2024-08-06"   # 128K（静态模型，100% 格式化输出）
+CHATGPT_4o_LATEST = "chatgpt-4o-latest"     # 128K（动态模型，价格高）
+CHATGPT_4o_MINI = "gpt-4o-mini"             # 128K（翻译较弱）
+
+HTTP_PROXY = "HTTP_PROXY"
+HTTPS_PROXY = "HTTPS_PROXY"
 
 ARG_ROLE = 'role'
 ARG_OPENAI_MODEL = 'openai_model'
 ARG_PROXY_IP = 'proxy_ip'
 ARG_PROXY_PORT = 'proxy_port'
+ARG_RSP_FORMAT = 'response_format'
 
 class ChatgptTranslation(BaseTranslation) :
 
     RETRY = 3
     RETRY_WAIT_SECONDS = 30
 
-    def __init__(self, openai_key, openai_model=CHATGPT_4o_MINI, proxy_ip='127.0.0.1', proxy_port=0) :
-        BaseTranslation.__init__(self, '', openai_key)
-        openai.api_key = openai_key
+    def __init__(self, openai_key, openai_model=CHATGPT_4o_MINI, proxy_ip='127.0.0.1', proxy_port=0, cut_len=500, response_format=None) :
+        BaseTranslation.__init__(self, '', openai_key, cut_len)
+        proxy = f"http://{proxy_ip}:{proxy_port}" if proxy_port > 0 else ""
+        proxies = { "http://": proxy, "https://": proxy, }
+        http_cli = httpx.Client(proxies=proxies) if proxy else None
+
+        self.ai_cli = OpenAI(api_key=openai_key, http_client=http_cli)
+        self.response_format = response_format
         self.model = openai_model or CHATGPT_4o_MINI
-        self.proxy = f"http://{proxy_ip}:{proxy_port}" if proxy_port > 0 else ""
         
     
     def _translate(self, segment, from_lang='英文', to_lang='中文', args={}) :
@@ -56,49 +64,27 @@ class ChatgptTranslation(BaseTranslation) :
 
     
     def _ask_gpt(self, role_setting, segment) :
-        self._enable_proxy()
         msg = [
             role_setting, 
             { "role": "user", "content": segment }
         ]
-        rsp = self._wait_for_ask(msg)
-        rst = rsp.get("choices")[0]["message"]["content"]
-        self._disable_proxy()
-        return rst
+        answer = self._wait_for_ask(msg)
+        return answer
     
 
     def _wait_for_ask(self, question) :
-        rsp = ""
+        answer = ""
         for i in range(self.RETRY) :
             try :
-                rsp = openai.ChatCompletion.create(
+                rsp = self.ai_cli.chat.completions.create(
                     model=self.model,
-                    messages=question
+                    messages=question, 
+                    response_format=self.response_format
                 )
+                answer = rsp.choices[0].message.content
                 break
 
-            except Exception as e:
-                rsp = {
-                    'choices': [{
-                        'message': {
-                            'content': f"[ERROR] ChatGPT No Response: {e}"
-                        }
-                    }]
-                }
+            except Exception as e :
+                answer = f"[ERROR] ChatGPT No Response: {e}"
                 time.sleep(self.RETRY_WAIT_SECONDS)
-        return rsp
-
-
-    def _enable_proxy(self) :
-        os.environ[HTTP_PROXY] = self.proxy
-        os.environ[HTTPS_PROXY] = self.proxy
-
-
-    def _disable_proxy(self) :
-        os.environ[HTTP_PROXY] = ""
-        os.environ[HTTPS_PROXY] = ""
-
-    
-    def _len_limit(self) :
-        return 500
-    
+        return answer
