@@ -47,12 +47,12 @@ class BaseTranslation :
         self.oncesave = oncesave    # False: 分段保存； True: 一次性保存
         trans_result = []
         segments = self._cut(content)
-        log.info("切割为 [%i] 段翻译 ..." % len(segments))
+        log.debug("切割为 [%i] 段翻译 ..." % len(segments))
 
         cnt = 0
         for seg in segments :
             cnt += 1
-            log.info("正在翻译第 [%i] 段 ..." % cnt)
+            log.debug("正在翻译第 [%i] 段 ..." % cnt)
             trans_segment = self._translate(seg, from_lang, to_lang, args)
             trans_result.append(trans_segment)
             if not self.oncesave :
@@ -67,6 +67,9 @@ class BaseTranslation :
 
     # 翻译接口每次调用有字数限制，过长文本需要分段翻译。
     def _cut(self, content) :
+        if self._len_limit() <= 0 :
+            return [ content ]
+        
         segments = []
         seg = []
         seg_len = 0

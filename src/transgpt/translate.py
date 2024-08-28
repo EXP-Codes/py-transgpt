@@ -33,7 +33,7 @@ def trans(content, api_id, api_key,
     :param platform     : 翻译平台，目前支持： chatgpt, baidu, tencent（默认）
     :param savepath     : 翻译文本保存的位置，若为空则不保存（可通过返回值获取）
     :param oncesave     : 是否一次性保存翻译文本（对于超长文本，内部会进行分段翻译，为了避免网络异常导致已翻译文本丢失，此项默认关闭）
-    :param cut_len      : 自动切割长文本的每一段长度（取决于 API 接口限制每次翻译的字数）
+    :param cut_len      : 自动切割长文本的每一段长度（取决于 API 接口限制每次翻译的字数），当 <= 0 时不会切割长文本
     :param args         : hash 其他参数表
                             api_url         : 仅百度翻译有用：接口 API 路径
                             region          : 仅腾讯翻译有用：翻译服务器所在的区域
@@ -42,6 +42,7 @@ def trans(content, api_id, api_key,
                             openai_model    : 仅 ChatGPT 有用：OpenAPI 接口的大模型
                             proxy_ip        : 仅 ChatGPT 有用：网络代理服务 IP
                             proxy_port      : 仅 ChatGPT 有用：网络代理服务端口
+                            response_format : 仅 ChatGPT 有用：ChatGPT-4o-mini 模型的新特性，支持返回内容格式化为 json_schema
     :return: 已翻译文本
     """
 

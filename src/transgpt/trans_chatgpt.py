@@ -31,6 +31,33 @@ ARG_OPENAI_MODEL = 'openai_model'
 ARG_PROXY_IP = 'proxy_ip'
 ARG_PROXY_PORT = 'proxy_port'
 ARG_RSP_FORMAT = 'response_format'
+# 关于 response_format : 
+#   ChatGPT-4o-mini 模型的新特性，支持返回内容格式化为 json_schema
+# 例如希望 openai 返回 { 'id': 1, 'name': 'xxxx', 'desc': 'yyyy' }
+# 那么可以定义：
+# response_format = {
+#     "type": "json_schema",
+#     "json_schema": {
+#         "name": "response_schema",
+#         "strict": True,
+#         "schema": {
+#             "type": "object",
+#             "properties": {
+#                 "id": {
+#                     "type": "integer"
+#                 },
+#                 "name": {
+#                     "type": "string"
+#                 },
+#                 "desc": {
+#                     "type": "string"
+#                 }
+#             },
+#             "required": ["id", "name", "desc"],
+#             "additionalProperties": False
+#         }
+#     }
+# }
 
 class ChatgptTranslation(BaseTranslation) :
 
