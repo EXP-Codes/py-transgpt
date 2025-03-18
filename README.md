@@ -109,7 +109,7 @@ result = trans(
 
 # 使用方法 2
 from transgpt.trans_chatgpt import ChatgptTranslation, CHATGPT_35_TURBO, ARG_ROLE
-client = ChatgptTranslation(${GPT_API_KEY}, CHATGPT_35_TURBO, '127.0.0.1', 8888)
+client = ChatgptTranslation(${GPT_API_KEY}, CHATGPT_35_TURBO, '127.0.0.1', 10090)
 result = client.translate(${CONTENT}, from_lang='日文', to_lang='中文')     # 使用内置 AI 人设
 result = client.translate(${CONTENT}, args={ ARG_ROLE: ${GPT_AI_ROLE} })    # 使用自定义 AI 人设
 ```

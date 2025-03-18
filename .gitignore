@@ -18,9 +18,10 @@ __pycache__/
 
 
 # log
-log/
+logs/
 *.log
 
 
 # cache
-tests/db/mysql/data
+test/db/mysql/data
+test/output

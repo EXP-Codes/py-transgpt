@@ -167,7 +167,7 @@ class TestScenes(unittest.TestCase):
                 ARG_ROLE: self.GPT_AI_ROLE,     # Option: 直接定义人设，无需指定 from_lang 和 to_lang （内部生成的默认人设会被覆盖）
                 ARG_OPENAI_MODEL: CHATGPT_35_TURBO, 
                 ARG_PROXY_IP: '127.0.0.1', 
-                ARG_PROXY_PORT: 8888
+                ARG_PROXY_PORT: 10090
             }
         )
 
@@ -178,7 +178,7 @@ class TestScenes(unittest.TestCase):
             self.GPT_API_KEY,
             openai_model=CHATGPT_35_TURBO,  # Option: 使用的模型，直接决定调用费用
             proxy_ip='127.0.0.1',           # Option: 国内需要挂代理
-            proxy_port=8888                 # Option: 国内需要挂代理
+            proxy_port=10090                # Option: 国内需要挂代理
         )
 
         # 最全参数
