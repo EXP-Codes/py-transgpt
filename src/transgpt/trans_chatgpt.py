@@ -21,6 +21,7 @@ CHATGPT_4o = "gpt-4o"                       # 128K（静态模型，适合翻译
 CHATGPT_4o_20240806 = "gpt-4o-2024-08-06"   # 128K（静态模型，100% 格式化输出）
 CHATGPT_4o_LATEST = "chatgpt-4o-latest"     # 128K（动态模型，价格高）
 CHATGPT_4o_MINI = "gpt-4o-mini"             # 128K（翻译较弱）
+CHATGPT_41 = "gpt-4.1"                      # 128K（静态模型，适合翻译，比 4o 性价比更高）
 CHATGPT_5_NANO = "gpt-5-nano"               # 1K
 CHATGPT_5_MINI = "gpt-5-mini"               # 4K
 CHATGPT_5 = "gpt-5"                         # 128K（静态模型，适合翻译，效果和性价比都比 4o 更好）
