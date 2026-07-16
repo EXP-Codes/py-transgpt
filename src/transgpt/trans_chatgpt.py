@@ -27,6 +27,10 @@ CHATGPT_5_MINI = "gpt-5-mini"               # 4K
 CHATGPT_5 = "gpt-5"                         # 128K（静态模型，适合翻译，效果和性价比都比 4o 更好）
 CHATGPT_5_LATEST = "gpt-5-chat-latest"      # 128K（动态模型，价格可能会变化）
 CHATGPT_52 = "gpt-5.2"                      # 128K（静态模型，适合翻译，效果和性价比都比 4.1 更好）
+CHATGPT_55 = "gpt-5.5"
+CHATGPT_56_LUNA = "gpt-5.6-luna"
+CHATGPT_56_TERRA = "gpt-5.6-terra"
+CHATGPT_56_SOL = "gpt-5.6-sol"
 
 HTTP_PROXY = "HTTP_PROXY"
 HTTPS_PROXY = "HTTPS_PROXY"
